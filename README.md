@@ -1,6 +1,4 @@
-![build](https://github.com/dario-baumberger/obsidian-json-table/actions/workflows/build.yml/badge.svg)
-
-![coverage](https://github.com/dario-baumberger/obsidian-json-table/actions/workflows/coverage.yml/badge.svg)
+[![Build and Test](https://github.com/dario-baumberger/obsidian-json-table/actions/workflows/build.yml/badge.svg)](https://github.com/dario-baumberger/obsidian-json-table/actions/workflows/build.yml)
 
 # JSON to table
 
