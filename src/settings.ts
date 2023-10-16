@@ -1,4 +1,4 @@
-import JsonTablePlugin from "main";
+import JsonTablePlugin from "src/main";
 import { App, PluginSettingTab, Setting } from "obsidian";
 
 export class JsonTablePluginSettingTab extends PluginSettingTab {
