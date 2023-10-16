@@ -1,4 +1,4 @@
-![Tests](https://github.com/dario-baumberger/obsidian-json-table/actions/workflows/main.yml/badge.svg)
+![Tests](https://github.com/dario-baumberger/obsidian-json-table/actions/workflows/node.js.yml/badge.svg)
 
 # JSON to table
 
