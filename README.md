@@ -1,3 +1,5 @@
+![Tests](https://github.com/dario-baumberger/obsidian-json-table/actions/workflows/main.yml.badge.svg)
+
 # JSON to table
 
 Convert json to table in your obsidian notes.
