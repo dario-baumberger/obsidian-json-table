@@ -43,7 +43,7 @@ export class JsonTablePluginSettingTab extends PluginSettingTab {
 		});
 		new Setting(containerEl)
 			.setName("Enable Debug Logging")
-			.setDesc("If enabled")
+			.setDesc("If anbled, more will be logged in the console.")
 			.addToggle((toggle) =>
 				toggle
 					.setValue(this.plugin.settings.devMode)
