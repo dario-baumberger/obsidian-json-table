@@ -40,7 +40,7 @@ Generate tables from a URL (which returns JSON) or a JSON string in your notes. 
 
 ### Community Plugin
 
-The Plugin was not release yes. You need to install it manually.
+The Plugin was not release yet. You need to install it manually.
 
 ### Manually installing the plugin
 
