@@ -1,4 +1,6 @@
 [![Build and Test](https://github.com/dario-baumberger/obsidian-json-table/actions/workflows/build.yml/badge.svg)](https://github.com/dario-baumberger/obsidian-json-table/actions/workflows/build.yml)
+[![Obsidian Downloads](https://img.shields.io/badge/dynamic/json?color=7e6ad6&labelColor=34208c&label=Obsidian%20Downloads&query=$['json-table'].downloads&url=https://raw.githubusercontent.com/obsidianmd/obsidian-releases/master/community-plugin-stats.json&)](obsidian://show-plugin?id=deepl)
+![GitHub stars](https://img.shields.io/github/stars/dario-baumberger/obsidian-json-table?style=flat)
 
 # Obsidian JSON to table
 
@@ -23,7 +25,7 @@ Generate tables from a URL (which returns JSON) or a JSON string in your notes. 
 | Pan  | 34  | Mumbai |
 ```
 
-#### JSON:
+#### JSON
 
 ```
 [{"Name":"Doe","Age":"22","City":"Berlin"},{"Name":"Pan","Age":"34","City":"Mumbai"}]
