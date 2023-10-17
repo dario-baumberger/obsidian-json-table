@@ -16,16 +16,23 @@ Generate tables from a URL (which returns JSON) or a JSON string in your notes. 
 
 #### Table
 
+```
 | Name | Age | City   |
 | ---- | --- | ------ |
 | Doe  | 22  | Berlin |
 | Pan  | 34  | Mumbai |
+```
 
 #### JSON:
 
+```
 [{"Name":"Doe","Age":"22","City":"Berlin"},{"Name":"Pan","Age":"34","City":"Mumbai"}]
+```
 
-`https://jsonplaceholder.typicode.com/todos`
+#### URL
+
+-   `https://raw.githubusercontent.com/dario-baumberger/obsidian-json-table/master/demo/example.json`
+-   `https://jsonplaceholder.typicode.com/todos`
 
 ## Installation
 
