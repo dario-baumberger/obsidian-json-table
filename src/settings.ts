@@ -1,5 +1,5 @@
 import JsonTablePlugin from "src/main";
-import { App, PluginSettingTab, Setting } from "obsidian";
+import {App, PluginSettingTab, Setting} from "obsidian";
 
 export class JsonTablePluginSettingTab extends PluginSettingTab {
 	plugin: JsonTablePlugin;
@@ -10,16 +10,16 @@ export class JsonTablePluginSettingTab extends PluginSettingTab {
 	}
 
 	display(): void {
-		const { containerEl } = this;
+		const {containerEl} = this;
 
 		containerEl.empty();
 
 		containerEl.createEl("h1", {
-			text: "JSON Table - Settings",
+			text: "JSON Table - Settings"
 		});
 
 		containerEl.createEl("h2", {
-			text: "Commands",
+			text: "Commands"
 		});
 
 		new Setting(containerEl)
@@ -41,7 +41,7 @@ export class JsonTablePluginSettingTab extends PluginSettingTab {
 			);
 
 		containerEl.createEl("h4", {
-			text: "Developper Settings",
+			text: "Developper Settings"
 		});
 		new Setting(containerEl)
 			.setName("Enable Debug Logging")

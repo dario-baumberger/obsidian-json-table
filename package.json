@@ -9,6 +9,7 @@
 		"version": "node version-bump.mjs && git add manifest.json versions.json",
 		"test": "vitest",
 		"lint": "npx eslint",
+		"prettier": "npx prettier .",
 		"coverage": "vitest run --coverage"
 	},
 	"keywords": [],
