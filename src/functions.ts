@@ -3,8 +3,7 @@ export interface KeyValuePair {
 }
 
 export function trimSeperatorSpaces(string: string) {
-	return string;
-	//return string.replace(/([^\S\r\n]*[|][^\S\r\n]*)/g, "|");
+	return string.replace(/([^\S\r\n]*[|][^\S\r\n]*)/g, "|");
 }
 
 export function collectAllKeys(input: unknown[]): string[] {
