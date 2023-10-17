@@ -35,27 +35,22 @@ export default class JsonTablePlugin extends Plugin {
 		this.addCommand({
 			id: "json-table-convert-from-url-to-table",
 			name: "Generate table from selected JSON URL",
-			editorCallback: (editor: Editor) => {
+			editorCallback: async (editor: Editor) => {
 				const selection = editor.getSelection();
-				fetch(selection)
-					.then((response) => response.json())
-					.then((json) => {
-						if (this.settings.devMode) {
-							console.log("JSON Table fetch response:", json);
-						}
-						try {
-							editor.replaceSelection(
-								jsonToTable(JSON.stringify(json))
-							);
-						} catch (error) {
-							console.error(error);
-							new Notice(error);
-						}
-					})
-					.catch((error) => {
-						console.error(error);
-						new Notice(error);
-					});
+				const response = await fetch(selection);
+
+				if (!response.ok) {
+					console.error(response.statusText);
+					new Notice(response.statusText);
+				}
+
+				const json = await response.json();
+
+				editor.replaceSelection(jsonToTable(JSON.stringify(json)));
+
+				if (this.settings.devMode) {
+					console.log("JSON Table fetch response:", json);
+				}
 			}
 		});
 
