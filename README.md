@@ -12,6 +12,21 @@ Generate tables from a URL (which returns JSON) or a JSON string in your notes. 
 | Generate table from a selected JSON URL | Creates a Markdown table based on JSON data from a selected URL. The URL needs to return valid JSON. |
 | Generate JSON from a selected table     | Creatse JSON based on your selected table.                                                           |
 
+### Examples
+
+#### Table
+
+| Name | Age | City   |
+| ---- | --- | ------ |
+| Doe  | 22  | Berlin |
+| Pan  | 34  | Mumbai |
+
+#### JSON:
+
+[{"Name":"Doe","Age":"22","City":"Berlin"},{"Name":"Pan","Age":"34","City":"Mumbai"}]
+
+`https://jsonplaceholder.typicode.com/todos`
+
 ## Installation
 
 ### Community Plugin
