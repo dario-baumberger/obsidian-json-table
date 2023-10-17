@@ -23,22 +23,20 @@ export class JsonTablePluginSettingTab extends PluginSettingTab {
 		});
 
 		new Setting(containerEl)
-			.setName("Translate selection")
+			.setName("Generate a table from selected JSON")
 			.setDesc(
-				'Translates the selected text from the "From language" to the "To language".'
+				"Creates a Markdown table based on your selected JSON. The JSON needs to be valid."
 			);
 
 		new Setting(containerEl)
-			.setName("Translate selection")
+			.setName("Generate table from a selected JSON URL")
 			.setDesc(
-				'Translates the selected text from the "From language" to the "To language".'
+				"Creates a Markdown table based on JSON data from a selected URL. The URL needs to return valid JSON."
 			);
 
 		new Setting(containerEl)
-			.setName("Translate selection")
-			.setDesc(
-				'Translates the selected text from the "From language" to the "To language".'
-			);
+			.setName("Generate JSON from a selected table")
+			.setDesc("Creatse JSON based on your selected table.");
 
 		containerEl.createEl("h4", {
 			text: "Developper Settings"
