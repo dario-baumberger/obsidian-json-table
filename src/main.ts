@@ -1,13 +1,13 @@
-import { jsonToTable, tableToJson } from "src/functions";
-import { Editor, Notice, Plugin } from "obsidian";
-import { JsonTablePluginSettingTab } from "src/settings";
+import {jsonToTable, tableToJson} from "src/functions";
+import {Editor, Notice, Plugin} from "obsidian";
+import {JsonTablePluginSettingTab} from "src/settings";
 
 interface JsonTablePluginSettings {
 	devMode: boolean;
 }
 
 const DEFAULT_SETTINGS: JsonTablePluginSettings = {
-	devMode: false,
+	devMode: false
 };
 
 export default class JsonTablePlugin extends Plugin {
@@ -29,7 +29,7 @@ export default class JsonTablePlugin extends Plugin {
 					console.error(error);
 					new Notice(error);
 				}
-			},
+			}
 		});
 
 		this.addCommand({
@@ -56,7 +56,7 @@ export default class JsonTablePlugin extends Plugin {
 						console.error(error);
 						new Notice(error);
 					});
-			},
+			}
 		});
 
 		this.addCommand({
@@ -74,7 +74,7 @@ export default class JsonTablePlugin extends Plugin {
 					console.error(error);
 					new Notice(error);
 				}
-			},
+			}
 		});
 
 		this.addSettingTab(new JsonTablePluginSettingTab(this.app, this));
