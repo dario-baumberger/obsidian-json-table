@@ -1,11 +1,19 @@
-export interface KeyValuePair {
-	[key: string]: unknown;
-}
-
-export function trimSeperatorSpaces(string: string) {
+/**
+ * Removes all whitespaces before and after |
+ *
+ * @param string string
+ * @returns string
+ */
+export function trimSeperatorSpaces(string: string): string {
 	return string.replace(/([^\S\r\n]*[|][^\S\r\n]*)/g, "|");
 }
 
+/**
+ * Search all keys in json and return as string array
+ *
+ * @param input []
+ * @returns string
+ */
 export function collectAllKeys(input: unknown[]): string[] {
 	const keys: string[] = [];
 
@@ -34,16 +42,12 @@ export function jsonToTable(content: string): string {
 		return "";
 	}
 
-	// Get the keys (column headers) from the first object in the JSON array.
-	const headers = Object.keys(jsonData[0]);
-
-	// Create the header row of the Markdown table.
+	// create header and separators
+	const headers = collectAllKeys(jsonData);
 	const headerRow = `| ${headers.join(" | ")} |`;
-
-	// Create the separator row between header and data rows.
 	const separatorRow = `| ${headers.map(() => "---").join(" | ")} |`;
 
-	// Create the data rows by iterating through the JSON data.
+	// create table body
 	const dataRows: string[] = jsonData.map(
 		(data: {[key: string]: unknown}) => {
 			return `| ${headers.map((header) => data[header]).join(" | ")} |`;
