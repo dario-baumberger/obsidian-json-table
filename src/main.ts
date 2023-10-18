@@ -17,7 +17,7 @@ export default class JsonTablePlugin extends Plugin {
 		await this.loadSettings();
 
 		this.addCommand({
-			id: "json-table-convert-selection-to-table",
+			id: "generate-table-from-selected-json",
 			name: "Generate table from selected JSON",
 			editorCallback: (editor: Editor) => {
 				if (this.settings.devMode) {
@@ -33,7 +33,7 @@ export default class JsonTablePlugin extends Plugin {
 		});
 
 		this.addCommand({
-			id: "json-table-convert-from-url-to-table",
+			id: "generate-table-from-selected-json-url",
 			name: "Generate table from selected JSON URL",
 			editorCallback: async (editor: Editor) => {
 				const selection = editor.getSelection();
@@ -55,7 +55,7 @@ export default class JsonTablePlugin extends Plugin {
 		});
 
 		this.addCommand({
-			id: "json-table-convert-selection-to-json",
+			id: "generate-json-from-selected-table",
 			name: "Generate JSON from selected table",
 			editorCallback: (editor: Editor) => {
 				if (this.settings.devMode) {

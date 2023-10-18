@@ -9,11 +9,11 @@ Generate tables from a URL (which returns JSON) or a JSON string in your notes. 
 
 ## Commands
 
-| Command                                 | Description                                                                                          |
-| --------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| Generate a table from selected JSON     | Creates a Markdown table based on your selected JSON. The JSON needs to be valid.                    |
-| Generate table from a selected JSON URL | Creates a Markdown table based on JSON data from a selected URL. The URL needs to return valid JSON. |
-| Generate JSON from a selected table     | Creatse JSON based on your selected table.                                                           |
+| Command                               | Description                                                                                        |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| Generate table from selected JSON     | Creates a Markdown table based on your selected JSON. The JSON needs to be valid.                  |
+| Generate table from selected JSON URL | Creates a Markdown table based on JSON data from selected URL. The URL needs to return valid JSON. |
+| Generate JSON from a selected table   | Creatse JSON based on your selected table.                                                         |
 
 ### Examples
 
@@ -51,7 +51,7 @@ The Plugin was not release yet. You need to install it manually.
 
 ### Manually installing the plugin
 
--   Go to [Releases](https://github.com/dario-baumberger/obsidian-json-table/releases)
+-   Go to the latest [Releases](https://github.com/dario-baumberger/obsidian-json-table/releases)
 -   Download `main.js`, `manifest.json`
 -   save into your vault `VaultFolder/.obsidian/plugins/obsidian-json-to-table/`
 

@@ -14,36 +14,32 @@ export class JsonTablePluginSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		containerEl.createEl("h1", {
-			text: "JSON Table - Settings"
-		});
-
 		containerEl.createEl("h2", {
 			text: "Commands"
 		});
 
 		new Setting(containerEl)
-			.setName("Generate a table from selected JSON")
+			.setName("Generate table from selected JSON")
 			.setDesc(
 				"Creates a Markdown table based on your selected JSON. The JSON needs to be valid."
 			);
 
 		new Setting(containerEl)
-			.setName("Generate table from a selected JSON URL")
+			.setName("Generate table from selected JSON URL")
 			.setDesc(
 				"Creates a Markdown table based on JSON data from a selected URL. The URL needs to return valid JSON."
 			);
 
 		new Setting(containerEl)
-			.setName("Generate JSON from a selected table")
+			.setName("Generate JSON from selected table")
 			.setDesc("Creatse JSON based on your selected table.");
 
 		containerEl.createEl("h4", {
-			text: "Developper Settings"
+			text: "Debug Logging"
 		});
 		new Setting(containerEl)
-			.setName("Enable Debug Logging")
-			.setDesc("If anbled, more will be logged in the console.")
+			.setName("Enable debug logging")
+			.setDesc("If enabled, more will be logged in the console.")
 			.addToggle((toggle) =>
 				toggle
 					.setValue(this.plugin.settings.devMode)
