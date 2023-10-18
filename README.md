@@ -3,7 +3,7 @@
 ![GitHub stars](https://img.shields.io/github/stars/dario-baumberger/obsidian-json-table?style=flat)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/dario-baumberger/obsidian-json-table/blob/master/LICENCE)
 
-# Obsidian JSON to table
+# Obsidian JSON table
 
 Simply switch between JSON and tables.
 
