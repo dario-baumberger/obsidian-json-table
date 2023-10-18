@@ -5,7 +5,9 @@
 
 # Obsidian JSON to table
 
-Generate tables from a URL (which returns JSON) or a JSON string in your notes. Generate JSON from a table in your notes.
+Simply switch between JSON and tables.
+
+Generate a table from a JSON string or a URL (which returns JSON) or in your notes. Generate JSON from a table in your notes.
 
 ## Commands
 
