@@ -51,7 +51,9 @@ The Plugin was not release yet. You need to install it manually.
 
 ### Manually installing the plugin
 
--   Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/obsidian-json-to-table/`.
+-   Go to [Releases](https://github.com/dario-baumberger/obsidian-json-table/releases)
+-   Download `main.js`, `manifest.json`
+-   save into your vault `VaultFolder/.obsidian/plugins/obsidian-json-to-table/`
 
 ## Contribution
 
