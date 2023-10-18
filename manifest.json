@@ -1,7 +1,7 @@
 {
 	"id": "obsidian-json-to-table",
 	"name": "JSON to table",
-	"version": "0.0.4",
+	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
 	"description": "Generate markdown tables based on json",
 	"author": "Dario Baumberger",
