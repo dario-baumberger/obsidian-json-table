@@ -14,7 +14,7 @@ export class JsonTablePluginSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		containerEl.createEl("h2", {
+		containerEl.createEl("h4", {
 			text: "Commands"
 		});
 
