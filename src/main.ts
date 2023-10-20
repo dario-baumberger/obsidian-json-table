@@ -1,5 +1,5 @@
 import {jsonToTable, tableToJson} from "src/functions";
-import {Editor, Notice, Plugin} from "obsidian";
+import {Editor, Notice, Plugin, requestUrl} from "obsidian";
 import {JsonTablePluginSettingTab} from "src/settings";
 
 interface JsonTablePluginSettings {
@@ -39,19 +39,23 @@ export default class JsonTablePlugin extends Plugin {
 			icon: "link",
 			editorCallback: async (editor: Editor) => {
 				const selection = editor.getSelection();
-				const response = await fetch(selection);
 
-				if (!response.ok) {
-					console.error(response.statusText);
-					new Notice(response.statusText);
-				}
+				try {
+					const response = await requestUrl(selection);
 
-				const json = await response.json();
+					editor.replaceSelection(
+						jsonToTable(JSON.stringify(response.json))
+					);
 
-				editor.replaceSelection(jsonToTable(JSON.stringify(json)));
-
-				if (this.settings.devMode) {
-					console.log("JSON Table fetch response:", json);
+					if (this.settings.devMode) {
+						console.log(
+							"JSON Table fetch response:",
+							response.json
+						);
+					}
+				} catch (error) {
+					console.error(error);
+					new Notice(error);
 				}
 			}
 		});
