@@ -11,11 +11,11 @@ Generate a table from a JSON string or a URL (which returns JSON) in your notes.
 
 ## Commands
 
-| Command                               | Description                                                                                        |
-| ------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| Generate table from selected JSON     | Creates a Markdown table based on your selected JSON. The JSON needs to be valid.                  |
-| Generate table from selected JSON URL | Creates a Markdown table based on JSON data from selected URL. The URL needs to return valid JSON. |
-| Generate JSON from a selected table   | Creatse JSON based on your selected table.                                                         |
+| Command                               | Description                                                                                          |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| Generate table from selected JSON     | Creates a Markdown table based on your selected JSON. The JSON needs to be valid.                    |
+| Generate table from selected JSON URL | Creates a Markdown table based on JSON data from selected URL. The URL needs to return a valid JSON. |
+| Generate JSON from a selected table   | Creates JSON based on your selected table.                                                           |
 
 ### Examples
 
@@ -50,7 +50,7 @@ Generate a table from a JSON string or a URL (which returns JSON) in your notes.
 ### Community Plugin
 
 -   Follow this link [Obsidian Plugin](https://obsidian.md/plugins?id=json-table)
--   Or open Obsidian Settings, go to Community Plugins, browse "JSON Table" click install and activte.
+-   Or open Obsidian Settings, go to Community Plugins, browse "JSON Table" click install and activate.
 
 ### Manually installing the plugin
 
@@ -62,4 +62,4 @@ Generate a table from a JSON string or a URL (which returns JSON) in your notes.
 
 -   Feel free to [open an issue](https://github.com/dario-baumberger/obsidian-json-table/issues) if you miss something
 -   Feel free to open a Pull request to implement a feature
-    -   Please extend tests if you ad logic
+    -   Please extend tests if you add logic
