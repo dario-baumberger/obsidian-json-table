@@ -9,7 +9,49 @@ export function trimSeperatorSpaces(string: string): string {
 }
 
 /**
- * Search all keys in json and return as string array
+ * Flattens the structure of a JSON object
+ *
+ * @param {Object} input
+ * @param {string} prefix
+ * @returns {Object}
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function flattenStructure(
+	input: unknown,
+	prefix: string = ""
+): Record<string, unknown> {
+	const flatObject: Record<string, unknown> = {};
+	if (typeof input === "object" && input !== null) {
+		for (const key in input as Record<string, unknown>) {
+			const value = (input as Record<string, unknown>)[key];
+			if (Array.isArray(value)) {
+				value.forEach((item, index) => {
+					if (typeof item === "object" && item !== null) {
+						const nestedFlatObject = flattenStructure(
+							item,
+							`${prefix}${key}[${index}].`
+						);
+						Object.assign(flatObject, nestedFlatObject);
+					} else {
+						flatObject[`${prefix}${key}[${index}]`] = item;
+					}
+				});
+			} else if (typeof value === "object" && value !== null) {
+				const nestedFlatObject = flattenStructure(
+					value,
+					`${prefix}${key}.`
+				);
+				Object.assign(flatObject, nestedFlatObject);
+			} else {
+				flatObject[`${prefix}${key}`] = value;
+			}
+		}
+	}
+	return flatObject;
+}
+
+/**
+ * Search all keys in JSON and return as string array
  *
  * @param {Array} input
  * @returns {string[]}
@@ -18,7 +60,7 @@ export function collectAllKeys(input: unknown[]): string[] {
 	const keys: string[] = [];
 
 	for (const obj of input) {
-		const jsonObject = obj as {[key: string]: never};
+		const jsonObject = flattenStructure(obj as {[key: string]: never});
 		for (const key in jsonObject) {
 			if (jsonObject.hasOwnProperty(key) && !keys.includes(key)) {
 				keys.push(key);
@@ -42,19 +84,24 @@ export function jsonToTable(content: string): string {
 		return "";
 	}
 
-	// create header and separators
-	const headers = collectAllKeys(jsonData);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const flatData = jsonData.map((item: any) => flattenStructure(item));
+
+	// Create header and separators
+	const headers = collectAllKeys(flatData);
 	const headerRow = `| ${headers.join(" | ")} |`;
 	const separatorRow = `| ${headers.map(() => "---").join(" | ")} |`;
 
-	// create table body
-	const dataRows: string[] = jsonData.map(
+	// Create table body
+	const dataRows: string[] = flatData.map(
 		(data: {[key: string]: unknown}) => {
-			return `| ${headers.map((header) => data[header]).join(" | ")} |`;
+			return `| ${headers
+				.map((header) => data[header] || "")
+				.join(" | ")} |`;
 		}
 	);
 
-	// make table array and removed dupplicate whitespaces
+	// Make table array and remove duplicate whitespaces
 	const markdownTable = [
 		headerRow,
 		separatorRow,
