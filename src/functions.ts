@@ -9,6 +9,27 @@ export function trimSeperatorSpaces(string: string): string {
 }
 
 /**
+ * Handles the flattening of an object or array item.
+ *
+ * @param {unknown} item - The item to be flattened.
+ * @param {string} key - The key associated with the item.
+ * @param {Record<string, unknown>} flatObject - The object that accumulates the flattened structure.
+ * @param {string} prefix - The current prefix for the key.
+ */
+function handleObject(
+	item: unknown,
+	key: string,
+	flatObject: Record<string, unknown>,
+	prefix: string
+) {
+	if (typeof item === "object" && item !== null) {
+		Object.assign(flatObject, flattenStructure(item, `${prefix}${key}.`));
+	} else {
+		flatObject[`${prefix}${key}`] = item;
+	}
+}
+
+/**
  * Flattens the structure of a JSON object
  *
  * @param {Object} input
@@ -16,35 +37,25 @@ export function trimSeperatorSpaces(string: string): string {
  * @returns {Object}
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 export function flattenStructure(
 	input: unknown,
 	prefix: string = ""
 ): Record<string, unknown> {
 	const flatObject: Record<string, unknown> = {};
-	if (typeof input === "object" && input !== null) {
-		for (const key in input as Record<string, unknown>) {
-			const value = (input as Record<string, unknown>)[key];
-			if (Array.isArray(value)) {
-				value.forEach((item, index) => {
-					if (typeof item === "object" && item !== null) {
-						const nestedFlatObject = flattenStructure(
-							item,
-							`${prefix}${key}[${index}].`
-						);
-						Object.assign(flatObject, nestedFlatObject);
-					} else {
-						flatObject[`${prefix}${key}[${index}]`] = item;
-					}
-				});
-			} else if (typeof value === "object" && value !== null) {
-				const nestedFlatObject = flattenStructure(
-					value,
-					`${prefix}${key}.`
-				);
-				Object.assign(flatObject, nestedFlatObject);
-			} else {
-				flatObject[`${prefix}${key}`] = value;
-			}
+
+	if (typeof input !== "object" || !input) {
+		return flatObject;
+	}
+
+	for (const key in input as Record<string, unknown>) {
+		const value = (input as Record<string, unknown>)[key];
+		if (Array.isArray(value)) {
+			value.forEach((item, index) =>
+				handleObject(item, `${key}[${index}]`, flatObject, prefix)
+			);
+		} else {
+			handleObject(value, key, flatObject, prefix);
 		}
 	}
 	return flatObject;
