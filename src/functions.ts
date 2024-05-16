@@ -1,8 +1,8 @@
 /**
  * Removes all whitespaces before and after |
  *
- * @param string string
- * @returns string
+ * @param {string} string
+ * @returns {string}
  */
 export function trimSeperatorSpaces(string: string): string {
 	return string.replace(/([^\S\r\n]*[|][^\S\r\n]*)/g, "|");
@@ -11,8 +11,8 @@ export function trimSeperatorSpaces(string: string): string {
 /**
  * Search all keys in json and return as string array
  *
- * @param input []
- * @returns string
+ * @param {Array} input
+ * @returns {string[]}
  */
 export function collectAllKeys(input: unknown[]): string[] {
 	const keys: string[] = [];
@@ -30,10 +30,10 @@ export function collectAllKeys(input: unknown[]): string[] {
 }
 
 /**
- * Convert json string to markdown table
+ * Convert JSON string to Markdown table
  *
- * @param content sring
- * @returns string
+ * @param {string} content
+ * @returns {string}
  */
 export function jsonToTable(content: string): string {
 	const jsonData = JSON.parse(content);
@@ -65,33 +65,33 @@ export function jsonToTable(content: string): string {
 }
 
 /**
- * Convert markdown table to json string
+ * Convert Markdown table to JSON string
  *
- * @param content string
- * @returns Array
+ * @param {string} content
+ * @returns {Array}
  */
 export function tableToJson(content: string): unknown[] {
 	const tableObject: unknown[] = [];
 
-	// prepare input to work with
+	// Prepare input to work with
 	content = trimSeperatorSpaces(content);
 
-	// get lines
+	// Get lines
 	const lines = content.split("\n").map((line) => line.trim());
 
-	// Do not proceed if only header row and/or seperator row are given
+	// Do not proceed if only header row and/or separator row are given
 	if (lines.length <= 2) {
 		return tableObject;
 	}
 
-	// get headers from first line
+	// Get headers from first line
 	const headers = lines[0].substring(1, lines[0].length - 1).split("|");
 
-	// get content rows (no header row, no separators row)
+	// Get content rows (no header row, no separators row)
 	const rows = lines.slice(2);
 
 	for (const row of rows) {
-		//remove leading and trailing |, after split by |
+		// Remove leading and trailing |, then split by |
 		const rowData = row.slice(1, -1).split("|");
 		const rowObject: {[key: string]: unknown} = {};
 
