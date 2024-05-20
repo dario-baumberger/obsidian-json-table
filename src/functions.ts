@@ -1,86 +1,12 @@
-/**
- * Removes all whitespaces before and after |
- *
- * @param {string} string
- * @returns {string}
- */
-export function trimSeperatorSpaces(string: string): string {
-	return string.replace(/([^\S\r\n]*[|][^\S\r\n]*)/g, "|");
-}
-
-/**
- * Handles the flattening of an object or array item.
- *
- * @param {unknown} item - The item to be flattened.
- * @param {string} key - The key associated with the item.
- * @param {Record<string, unknown>} flatObject - The object that accumulates the flattened structure.
- * @param {string} prefix - The current prefix for the key.
- */
-function handleObject(
-	item: unknown,
-	key: string,
-	flatObject: Record<string, unknown>,
-	prefix: string
-) {
-	if (typeof item === "object" && item !== null) {
-		Object.assign(flatObject, flattenStructure(item, `${prefix}${key}.`));
-	} else {
-		flatObject[`${prefix}${key}`] = item;
-	}
-}
-
-/**
- * Flattens the structure of a JSON object
- *
- * @param {Object} input
- * @param {string} prefix
- * @returns {Object}
- */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-
-export function flattenStructure(
-	input: unknown,
-	prefix: string = ""
-): Record<string, unknown> {
-	const flatObject: Record<string, unknown> = {};
-
-	if (typeof input !== "object" || !input) {
-		return flatObject;
-	}
-
-	for (const key in input as Record<string, unknown>) {
-		const value = (input as Record<string, unknown>)[key];
-		if (Array.isArray(value)) {
-			value.forEach((item, index) =>
-				handleObject(item, `${key}[${index}]`, flatObject, prefix)
-			);
-		} else {
-			handleObject(value, key, flatObject, prefix);
-		}
-	}
-	return flatObject;
-}
-
-/**
- * Search all keys in JSON and return as string array
- *
- * @param {Array} input
- * @returns {string[]}
- */
-export function collectAllKeys(input: unknown[]): string[] {
-	const keys: string[] = [];
-
-	for (const obj of input) {
-		const jsonObject = flattenStructure(obj as {[key: string]: never});
-		for (const key in jsonObject) {
-			if (jsonObject.hasOwnProperty(key) && !keys.includes(key)) {
-				keys.push(key);
-			}
-		}
-	}
-
-	return keys;
-}
+import {
+	collectAllKeys,
+	flattenStructure,
+	getLineContent,
+	getNestedObject,
+	getTableLines,
+	parseHeader,
+	trimSeperatorSpaces
+} from "./helpers";
 
 /**
  * Convert JSON string to Markdown table
@@ -119,6 +45,7 @@ export function jsonToTable(content: string): string {
 		...dataRows.map((row: string) => row.replace(/( {2,})/g, " "))
 	].join("\n");
 
+	// return markdown table
 	return markdownTable;
 }
 
@@ -128,37 +55,38 @@ export function jsonToTable(content: string): string {
  * @param {string} content
  * @returns {Array}
  */
-export function tableToJson(content: string): unknown[] {
-	const tableObject: unknown[] = [];
-
-	// Prepare input to work with
+export function tableToJson(content: string): Record<string, unknown>[] {
+	const tableObject: Record<string, unknown>[] = [];
 	content = trimSeperatorSpaces(content);
-
-	// Get lines
-	const lines = content.split("\n").map((line) => line.trim());
-
-	// Do not proceed if only header row and/or separator row are given
-	if (lines.length <= 2) {
-		return tableObject;
-	}
-
-	// Get headers from first line
-	const headers = lines[0].substring(1, lines[0].length - 1).split("|");
-
-	// Get content rows (no header row, no separators row)
+	const lines = getTableLines(content);
+	if (lines.length <= 2) return tableObject;
+	const headers = getLineContent(lines[0]);
 	const rows = lines.slice(2);
+	const parsedHeaders = headers.map(parseHeader);
 
 	for (const row of rows) {
-		// Remove leading and trailing |, then split by |
-		const rowData = row.slice(1, -1).split("|");
-		const rowObject: {[key: string]: unknown} = {};
-
+		const rowData = getLineContent(row);
+		const rowObject: Record<string, unknown> = {};
 		for (let i = 0; i < headers.length; i++) {
-			rowObject[headers[i]] = rowData[i];
+			const {keys, isArray, indices} = parsedHeaders[i];
+			const key = keys[keys.length - 1].replace(/\[\d+\]/, "");
+			const current = getNestedObject(
+				rowObject,
+				keys,
+				isArray,
+				indices
+			) as Record<string, unknown>; // Add type assertion
+			if (isArray[keys.length - 1]) {
+				if (!Array.isArray(current[key])) {
+					(current[key] as unknown[]) = [];
+				}
+				(current[key] as unknown[])[indices[keys.length - 1]!] =
+					rowData[i];
+			} else {
+				(current as Record<string, unknown>)[key] = rowData[i];
+			}
 		}
-
 		tableObject.push(rowObject);
 	}
-
 	return tableObject;
 }
