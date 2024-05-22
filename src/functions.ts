@@ -1,12 +1,10 @@
+import {collectAllKeys, flattenStructure, getNestedObject} from "./json.utils";
 import {
-	collectAllKeys,
-	flattenStructure,
 	getLineContent,
-	getNestedObject,
 	getTableLines,
 	parseHeader,
 	trimSeperatorSpaces
-} from "./helpers";
+} from "./md.utils";
 
 /**
  * Convert JSON string to Markdown table
@@ -80,10 +78,10 @@ export function tableToJson(content: string): Record<string, unknown>[] {
 				if (!Array.isArray(current[key])) {
 					(current[key] as unknown[]) = [];
 				}
-				(current[key] as unknown[])[indices[keys.length - 1]!] =
+				(current[key] as unknown[])[indices[keys.length - 1]] =
 					rowData[i];
 			} else {
-				(current as Record<string, unknown>)[key] = rowData[i];
+				current[key] = rowData[i];
 			}
 		}
 		tableObject.push(rowObject);

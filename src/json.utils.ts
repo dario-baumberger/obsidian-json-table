@@ -1,14 +1,4 @@
 /**
- * Removes all whitespaces before and after |
- *
- * @param {string} string
- * @returns {string}
- */
-export function trimSeperatorSpaces(string: string): string {
-	return string.replace(/([^\S\r\n]*[|][^\S\r\n]*)/g, "|");
-}
-
-/**
  * Flattens the structure of a JSON object
  *
  * @param {Object} input
@@ -98,36 +88,6 @@ export function collectAllKeys(input: unknown[]): string[] {
 	}
 
 	return keys;
-}
-
-export function getTableLines(content: string): string[] {
-	return content
-		.split("\n")
-		.map((line) => line.trim())
-		.filter((line) => line.length > 0);
-}
-
-export function getLineContent(line: string): string[] {
-	return line
-		.slice(1, -1)
-		.split("|")
-		.map((content) => content.trim());
-}
-
-export function parseHeader(header: string): {
-	keys: string[];
-	isArray: boolean[];
-	indices: number[];
-} {
-	const keys = header.split(".");
-	const isArray = keys.map((key) => key.includes("["));
-	const indices = keys
-		.map((key) => {
-			const match = key.match(/\[(\d+)\]/);
-			return match ? parseInt(match[1]) : undefined;
-		})
-		.filter((index) => index !== undefined) as number[]; // Filter out undefined values and convert to number[]
-	return {keys, isArray, indices};
 }
 
 export function getNestedObject(

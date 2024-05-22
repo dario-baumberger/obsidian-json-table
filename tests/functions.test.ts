@@ -60,7 +60,7 @@ describe("jsonToTable", () => {
 		).toStrictEqual(testCaseSmallTable.md);
 	});
 
-	test("testTableLarge", () => {
+	test("testCaseTableLarge", () => {
 		expect(
 			jsonToTable(JSON.stringify(testCaseTableLarge.json))
 		).toStrictEqual(testCaseTableLarge.md);
