@@ -75,6 +75,7 @@ export function tableToJson(content: string): Record<string, unknown>[] {
 				indices
 			) as Record<string, unknown>; // Add type assertion
 			if (isArray[keys.length - 1]) {
+				// Todo add type check for string or number
 				if (!Array.isArray(current[key])) {
 					(current[key] as unknown[]) = [];
 				}

@@ -5,10 +5,12 @@ import {describe} from "node:test";
 import {
 	testCaseEmpty,
 	testCaseHeaderOnly,
+	testCaseLarge,
+	testCaseNDimensionComplex,
+	testCaseNDimensionMedium,
+	testCaseNDimensionSimple,
 	testCaseNoTableBody,
-	testCaseSmallTable,
-	testCaseTableLarge,
-	testCaseTableNDimension
+	testCaseSmallTable
 } from "./test-data";
 
 describe("tableToJson", () => {
@@ -35,14 +37,24 @@ describe("tableToJson", () => {
 	});
 
 	test("Complete table large", () => {
-		expect(tableToJson(testCaseTableLarge.md)).toEqual(
-			testCaseTableLarge.json
+		expect(tableToJson(testCaseLarge.md)).toEqual(testCaseLarge.json);
+	});
+
+	test("Test testCaseNDimensionSimple", () => {
+		expect(tableToJson(testCaseNDimensionSimple.md)).toStrictEqual(
+			testCaseNDimensionSimple.json
 		);
 	});
 
-	test("Table n dimensions small", () => {
-		expect(tableToJson(testCaseTableNDimension.md)).toStrictEqual(
-			testCaseTableNDimension.json
+	test("Test testCaseNDimensionMedium", () => {
+		expect(tableToJson(testCaseNDimensionMedium.md)).toStrictEqual(
+			testCaseNDimensionMedium.json
+		);
+	});
+
+	test("Test testCaseNDimensionComplex", () => {
+		expect(tableToJson(testCaseNDimensionComplex.md)).toStrictEqual(
+			testCaseNDimensionComplex.json
 		);
 	});
 });
@@ -60,15 +72,27 @@ describe("jsonToTable", () => {
 		).toStrictEqual(testCaseSmallTable.md);
 	});
 
-	test("testCaseTableLarge", () => {
-		expect(
-			jsonToTable(JSON.stringify(testCaseTableLarge.json))
-		).toStrictEqual(testCaseTableLarge.md);
+	test("Test testCaseLarge", () => {
+		expect(jsonToTable(JSON.stringify(testCaseLarge.json))).toStrictEqual(
+			testCaseLarge.md
+		);
 	});
 
-	test("testNDimension", () => {
+	test("Test testCaseNDimensionSimple", () => {
 		expect(
-			jsonToTable(JSON.stringify(testCaseTableNDimension.json))
-		).toStrictEqual(testCaseTableNDimension.md);
+			jsonToTable(JSON.stringify(testCaseNDimensionSimple.json))
+		).toStrictEqual(testCaseNDimensionSimple.md);
+	});
+
+	test("Test testCaseNDimensionMedium", () => {
+		expect(
+			jsonToTable(JSON.stringify(testCaseNDimensionMedium.json))
+		).toStrictEqual(testCaseNDimensionMedium.md);
+	});
+
+	test("Test testCaseNDimensionComplex", () => {
+		expect(
+			jsonToTable(JSON.stringify(testCaseNDimensionComplex.json))
+		).toStrictEqual(testCaseNDimensionComplex.md);
 	});
 });

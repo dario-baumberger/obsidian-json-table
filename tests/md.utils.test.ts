@@ -6,7 +6,7 @@ import {
 	parseHeader,
 	trimSeperatorSpaces
 } from "src/md.utils";
-import {testCaseSmallTable, testCaseTableLarge} from "./test-data";
+import {testCaseLarge, testCaseSmallTable} from "./test-data";
 
 describe("MD Utils", () => {
 	describe("trimSeperatorSpaces", () => {
@@ -123,7 +123,7 @@ describe("MD Utils", () => {
 
 	describe("getLineContent", () => {
 		test("Header Line", () => {
-			expect(getLineContent(testCaseTableLarge.lines[0])).toEqual([
+			expect(getLineContent(testCaseLarge.lines[0])).toEqual([
 				"Test1",
 				"Test2",
 				"Test3",
@@ -132,7 +132,7 @@ describe("MD Utils", () => {
 		});
 
 		test("Separator Line", () => {
-			expect(getLineContent(testCaseTableLarge.lines[1])).toEqual([
+			expect(getLineContent(testCaseLarge.lines[1])).toEqual([
 				"---",
 				"---",
 				"---",
@@ -141,7 +141,7 @@ describe("MD Utils", () => {
 		});
 
 		test("Content Line", () => {
-			expect(getLineContent(testCaseTableLarge.lines[2])).toEqual([
+			expect(getLineContent(testCaseLarge.lines[2])).toEqual([
 				"Value 1.1",
 				"Value 1.2",
 				"Value 1.3",
@@ -184,9 +184,9 @@ describe("MD Utils", () => {
 			);
 		});
 
-		test("testCaseTableLarge", () => {
-			expect(getTableLines(testCaseTableLarge.md)).toEqual(
-				testCaseTableLarge.lines
+		test("testCaseLarge", () => {
+			expect(getTableLines(testCaseLarge.md)).toEqual(
+				testCaseLarge.lines
 			);
 		});
 

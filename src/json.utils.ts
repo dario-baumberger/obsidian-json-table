@@ -26,7 +26,7 @@ export function flattenStructure(
 						flatObject,
 						flattenStructure(item, `${newKey}.`)
 					);
-				} else {
+				} else if (item !== undefined) {
 					flatObject[newKey] = item;
 				}
 			});
@@ -37,7 +37,7 @@ export function flattenStructure(
 					flatObject,
 					flattenStructure(value, `${newKey}.`)
 				);
-			} else {
+			} else if (value !== undefined) {
 				flatObject[newKey] = value;
 			}
 		}
