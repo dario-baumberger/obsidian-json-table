@@ -122,3 +122,31 @@ export function getNestedObject(
 	}
 	return current;
 }
+
+export function convertToPrimitive(
+	input: string
+): boolean | number | string | null | undefined {
+	const check = input.toLowerCase();
+
+	if (check === "true") {
+		return true;
+	} else if (check === "false") {
+		return false;
+	} else if (check === "null") {
+		return null;
+	} else if (check === "undefined") {
+		return undefined;
+	} else if (check === undefined) {
+		return undefined;
+	} else if (check === "") {
+		return undefined;
+	} else if (check === "0") {
+		return 0;
+	} else if (check.startsWith("0")) {
+		return input;
+	} else if (!isNaN(Number(input))) {
+		return Number(input);
+	} else {
+		return input;
+	}
+}

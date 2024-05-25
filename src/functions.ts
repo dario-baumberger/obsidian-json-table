@@ -1,4 +1,9 @@
-import {collectAllKeys, flattenStructure, getNestedObject} from "./json.utils";
+import {
+	collectAllKeys,
+	convertToPrimitive,
+	flattenStructure,
+	getNestedObject
+} from "./json.utils";
 import {
 	getLineContent,
 	getTableLines,
@@ -31,7 +36,11 @@ export function jsonToTable(content: string): string {
 	const dataRows: string[] = flatData.map(
 		(data: {[key: string]: unknown}) => {
 			return `| ${headers
-				.map((header) => data[header] || "")
+				.map((header) =>
+					data[header] !== undefined && data[header] !== null
+						? data[header]
+						: ""
+				)
 				.join(" | ")} |`;
 		}
 	);
@@ -65,27 +74,39 @@ export function tableToJson(content: string): Record<string, unknown>[] {
 	for (const row of rows) {
 		const rowData = getLineContent(row);
 		const rowObject: Record<string, unknown> = {};
+
 		for (let i = 0; i < headers.length; i++) {
 			const {keys, isArray, indices} = parsedHeaders[i];
 			const key = keys[keys.length - 1].replace(/\[\d+\]/, "");
+
+			let value: string | number | null | undefined | boolean =
+				rowData[i];
+			value = convertToPrimitive(value);
+
+			if (value === null || value === undefined || value === "") {
+				continue;
+			}
+
 			const current = getNestedObject(
 				rowObject,
 				keys,
 				isArray,
 				indices
 			) as Record<string, unknown>; // Add type assertion
+
 			if (isArray[keys.length - 1]) {
-				// Todo add type check for string or number
 				if (!Array.isArray(current[key])) {
 					(current[key] as unknown[]) = [];
 				}
-				(current[key] as unknown[])[indices[keys.length - 1]] =
-					rowData[i];
+				(current[key] as unknown[])[indices[keys.length - 1]] = value;
 			} else {
-				current[key] = rowData[i];
+				current[key] = value;
 			}
 		}
-		tableObject.push(rowObject);
+
+		if (Object.keys(rowObject).length > 0) {
+			tableObject.push(rowObject);
+		}
 	}
 	return tableObject;
 }

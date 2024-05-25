@@ -1,6 +1,11 @@
 import {expect, test} from "vitest";
 import {describe} from "node:test";
-import {collectAllKeys, flattenStructure, handleObject} from "src/json.utils";
+import {
+	collectAllKeys,
+	convertToPrimitive,
+	flattenStructure,
+	handleObject
+} from "src/json.utils";
 
 describe("JSON Utils", () => {
 	describe("collectAllKeys", () => {
@@ -193,8 +198,7 @@ describe("JSON Utils", () => {
 			).toStrictEqual({
 				a: 1,
 				b: true,
-				c: null,
-				d: undefined
+				c: null
 			});
 		});
 
@@ -253,5 +257,47 @@ describe("JSON Utils", () => {
 				undefined
 			);
 		});
+	});
+});
+
+describe("convertToPrimitive", () => {
+	test('should convert "true" to boolean true', () => {
+		expect(convertToPrimitive("true")).toBe(true);
+	});
+
+	test('should convert "false" to boolean false', () => {
+		expect(convertToPrimitive("false")).toBe(false);
+	});
+
+	test('should convert "null" to null', () => {
+		expect(convertToPrimitive("null")).toBe(null);
+	});
+
+	test('should convert "undefined" to undefined', () => {
+		expect(convertToPrimitive("undefined")).toBe(undefined);
+	});
+
+	test('should return string starting with "0" as is', () => {
+		expect(convertToPrimitive("0123")).toBe("0123");
+	});
+
+	test("should convert numeric string to number", () => {
+		expect(convertToPrimitive("123")).toBe(123);
+		expect(convertToPrimitive("456 ")).toBe(456);
+		expect(convertToPrimitive(" 789")).toBe(789);
+	});
+
+	test("should return non-numeric string as is", () => {
+		expect(convertToPrimitive("Hello")).toBe("Hello");
+		expect(convertToPrimitive("3 6 9")).toBe("3 6 9");
+		expect(convertToPrimitive("1,2")).toBe("1,2");
+		expect(convertToPrimitive("999'999.99")).toBe("999'999.99");
+	});
+
+	test("should handle case insensitivity", () => {
+		expect(convertToPrimitive("TrUe")).toBe(true);
+		expect(convertToPrimitive("FaLsE")).toBe(false);
+		expect(convertToPrimitive("NuLl")).toBe(null);
+		expect(convertToPrimitive("UnDeFiNeD")).toBe(undefined);
 	});
 });

@@ -32,13 +32,11 @@ export const testCaseLarge = {
 		{
 			Test1: "Value 2.1",
 			Test2: "Value 2.2",
-			Test3: "Value 2.3",
-			Test4: ""
+			Test3: "Value 2.3"
 		},
 		{
 			Test1: "Value 3.1",
 			Test2: "Value 3.2",
-			Test3: "",
 			Test4: "Value 3.4"
 		}
 	],
@@ -117,14 +115,14 @@ export const testCaseNDimensionMedium = {
 };
 
 export const testCaseNDimensionComplex = {
-	md: `| name | age | contact.email | contact.phone | skills[0] | skills[1] | education.degree | education.school | projects[0].name | projects[0].duration | projects[0].technologies[0] | projects[0].technologies[1] | projects[1].name | projects[1].duration | projects[1].technologies[0] | projects[1].technologies[1] |\n| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |\n| John Doe | 30 | john@example.com | 1234567890 | JavaScript | TypeScript | Computer Science | XYZ University | Project 1 | 6 | React | Redux | Project 2 | 12 | Node.js | MongoDB |\n| Jane Doe | 28 | jane@example.com | 0987654321 | Python | Data Analysis | Data Science | ABC University | Project A | 3 | Pandas | NumPy | Project B | 8 | Scikit-learn | TensorFlow |\n| Bob Smith | 35 | bob@example.com | | Java | | | | Project X | 10 | Spring Boot | | | | | |`,
+	md: `| name | age | contact.email | contact.phone | skills[0] | skills[1] | education.degree | education.school | projects[0].name | projects[0].duration | projects[0].technologies[0] | projects[0].technologies[1] | projects[1].name | projects[1].duration | projects[1].technologies[0] | projects[1].technologies[1] | active | balance |\n| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |\n| John Doe | 30 | john@example.com | 1234567890 | JavaScript | TypeScript | Computer Science | XYZ University | Project 1 | 0 | React | Redux | Project 2 | 12 | Node.js | MongoDB | true | -100 |\n| Jane Doe | | jane@example.com | 0987654321 | Python | Data Analysis | Data Science | ABC University | Project A | 3 | Pandas | NumPy | Project B | 8 | Scikit-learn | TensorFlow | false | 200 |\n| Bob Smith | 35 | bob@example.com | | Java | | | | Project X | 10 | Spring Boot | | | | | | true | -50 |`,
 	json: [
 		{
 			name: "John Doe",
 			age: 30,
 			contact: {
 				email: "john@example.com",
-				phone: "1234567890"
+				phone: 1234567890
 			},
 			skills: ["JavaScript", "TypeScript"],
 			education: {
@@ -134,7 +132,7 @@ export const testCaseNDimensionComplex = {
 			projects: [
 				{
 					name: "Project 1",
-					duration: 6,
+					duration: 0,
 					technologies: ["React", "Redux"]
 				},
 				{
@@ -142,7 +140,9 @@ export const testCaseNDimensionComplex = {
 					duration: 12,
 					technologies: ["Node.js", "MongoDB"]
 				}
-			]
+			],
+			active: true,
+			balance: -100
 		},
 		{
 			name: "Jane Doe",
@@ -166,7 +166,9 @@ export const testCaseNDimensionComplex = {
 					duration: 8,
 					technologies: ["Scikit-learn", "TensorFlow"]
 				}
-			]
+			],
+			active: false,
+			balance: 200
 		},
 		{
 			name: "Bob Smith",
@@ -181,14 +183,16 @@ export const testCaseNDimensionComplex = {
 					duration: 10,
 					technologies: ["Spring Boot"]
 				}
-			]
+			],
+			active: true,
+			balance: -50
 		}
 	],
 	lines: [
-		"| name | age | contact.email | contact.phone | skills[0] | skills[1] | education.degree | education.school | projects[0].name | projects[0].duration | projects[0].technologies[0] | projects[0].technologies[1] | projects[1].name | projects[1].duration | projects[1].technologies[0] | projects[1].technologies[1] |",
-		"| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
-		"| John Doe | 30 | john@example.com | 1234567890 | JavaScript | TypeScript | Computer Science | XYZ University | Project 1 | 6 | React | Redux | Project 2 | 12 | Node.js | MongoDB |",
-		"| Jane Doe | 28 | jane@example.com | 0987654321 | Python | Data Analysis | Data Science | ABC University | Project A | 3 | Pandas | NumPy | Project B | 8 | Scikit-learn | TensorFlow |",
-		"| Bob Smith | 35 | bob@example.com | | Java | | | | Project X | 10 | Spring Boot | | | | | |"
+		"| name | age | contact.email | contact.phone | skills[0] | skills[1] | education.degree | education.school | projects[0].name | projects[0].duration | projects[0].technologies[0] | projects[0].technologies[1] | projects[1].name | projects[1].duration | projects[1].technologies[0] | projects[1].technologies[1] | active | balance |",
+		"| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
+		"| John Doe | 30 | john@example.com | 1234567890 | JavaScript | TypeScript | Computer Science | XYZ University | Project 1 | 0 | React | Redux | Project 2 | 12 | Node.js | MongoDB | true | -100 |",
+		"| Jane Doe | | jane@example.com | 0987654321 | Python | Data Analysis | Data Science | ABC University | Project A | 3 | Pandas | NumPy | Project B | 8 | Scikit-learn | TensorFlow | false | 200 |",
+		"| Bob Smith | 35 | bob@example.com | | Java | | | | Project X | 10 | Spring Boot | | | | | | true | -50 |"
 	]
 };
