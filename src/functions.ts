@@ -1,15 +1,9 @@
-import {
-	collectAllKeys,
-	convertToPrimitive,
-	flattenStructure,
-	getNestedObject,
-	processRow
-} from "./json.utils";
+import {collectAllKeys, flattenStructure, processRow} from "./json.utils";
 import {
 	createDataRow,
 	createHeaderRow,
 	createSeparatorRow,
-	getLineContent,
+	getRowContent,
 	getTableLines,
 	parseHeader,
 	removeDuplicateWhitespaces,
@@ -34,12 +28,14 @@ export function jsonToTable(content: string): string {
 	const headers = collectAllKeys(flatData);
 	const headerRow = createHeaderRow(headers);
 	const separatorRow = createSeparatorRow(headers);
-	const dataRows = flatData.map((data) => createDataRow(data, headers));
+	const dataRows = flatData.map((data: {[key: string]: unknown}) =>
+		createDataRow(data, headers)
+	);
 
 	const markdownTable = [
 		headerRow,
 		separatorRow,
-		...dataRows.map((data) => {
+		...dataRows.map((data: string) => {
 			return removeDuplicateWhitespaces(data);
 		})
 	].join("\n");
@@ -61,7 +57,7 @@ export function tableToJson(content: string): Record<string, unknown>[] {
 		return [];
 	}
 
-	const headers = getLineContent(lines[0]);
+	const headers = getRowContent(lines[0]);
 	const rows = lines.slice(2);
 	const parsedHeaders = headers.map(parseHeader);
 

@@ -15,7 +15,7 @@ export function getTableLines(content: string): string[] {
 		.filter((line) => line.length > 0);
 }
 
-export function getLineContent(line: string): string[] {
+export function getRowContent(line: string): string[] {
 	return line
 		.slice(1, -1)
 		.split("|")

@@ -1,4 +1,4 @@
-import {getLineContent, parseHeader} from "./md.utils";
+import {getRowContent, parseHeader} from "./md.utils";
 
 /**
  * Checks if the input is an object and not null
@@ -141,7 +141,7 @@ export function getNestedObject(
 ): Record<string, unknown> | unknown[] {
 	let current: Record<string, unknown> | unknown[] = rowObject;
 	for (let j = 0; j < keys.length - 1; j++) {
-		const key = keys[j].replace(/\[\d+\]/, "");
+		const key = keys[j].replace(/\[\d+\]/, ""); // replace array index
 		if (isArray[j]) {
 			if (!Array.isArray(current[key])) {
 				current[key] = [];
@@ -196,7 +196,7 @@ export function processRow(
 	row: string,
 	parsedHeaders: ReturnType<typeof parseHeader>[]
 ): Record<string, unknown> {
-	const rowData = getLineContent(row);
+	const rowData = getRowContent(row);
 	const rowObject: Record<string, unknown> = {};
 
 	for (let i = 0; i < parsedHeaders.length; i++) {

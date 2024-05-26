@@ -3,7 +3,7 @@ import {describe} from "node:test";
 import {
 	createHeaderRow,
 	createSeparatorRow,
-	getLineContent,
+	getRowContent,
 	getTableLines,
 	parseHeader,
 	trimSeperatorSpaces
@@ -75,6 +75,12 @@ describe("MD Utils", () => {
 				);
 			});
 
+			test("Different Spaces", () => {
+				expect(trimSeperatorSpaces("|    ||  |  ")).toStrictEqual(
+					"||||"
+				);
+			});
+
 			test("Newlines and Spaces", () => {
 				expect(trimSeperatorSpaces("\n | Test | \n")).toStrictEqual(
 					"\n|Test|\n"
@@ -125,7 +131,7 @@ describe("MD Utils", () => {
 
 	describe("getLineContent", () => {
 		test("Header Line", () => {
-			expect(getLineContent(testCaseLarge.lines[0])).toEqual([
+			expect(getRowContent(testCaseLarge.lines[0])).toEqual([
 				"Test1",
 				"Test2",
 				"Test3",
@@ -134,7 +140,7 @@ describe("MD Utils", () => {
 		});
 
 		test("Separator Line", () => {
-			expect(getLineContent(testCaseLarge.lines[1])).toEqual([
+			expect(getRowContent(testCaseLarge.lines[1])).toEqual([
 				"---",
 				"---",
 				"---",
@@ -143,7 +149,7 @@ describe("MD Utils", () => {
 		});
 
 		test("Content Line", () => {
-			expect(getLineContent(testCaseLarge.lines[2])).toEqual([
+			expect(getRowContent(testCaseLarge.lines[2])).toEqual([
 				"Value 1.1",
 				"Value 1.2",
 				"Value 1.3",
@@ -152,30 +158,30 @@ describe("MD Utils", () => {
 		});
 
 		test("emptyString", () => {
-			expect(getLineContent("")).toEqual([""]);
+			expect(getRowContent("")).toEqual([""]);
 		});
 
 		test("singlePipeStartNoSpace", () => {
-			expect(getLineContent("|u ")).toEqual(["u"]);
+			expect(getRowContent("|u ")).toEqual(["u"]);
 		});
 
 		test("singlePipeEndNoSpace", () => {
-			expect(getLineContent(" g|")).toEqual(["g"]);
+			expect(getRowContent(" g|")).toEqual(["g"]);
 		});
 
 		test("singlePipeSpace", () => {
-			expect(getLineContent(" | ")).toEqual(["", ""]);
+			expect(getRowContent(" | ")).toEqual(["", ""]);
 		});
 
 		test("whitespaceOnly", () => {
-			expect(getLineContent("   |   |   ")).toEqual(["", "", ""]);
+			expect(getRowContent("   |   |   ")).toEqual(["", "", ""]);
 		});
 
 		test("multiplePipes", () => {
-			expect(getLineContent("|a||b|")).toEqual(["a", "", "b"]);
+			expect(getRowContent("|a||b|")).toEqual(["a", "", "b"]);
 		});
 		test("wrong format", () => {
-			expect(getLineContent("1|2||3|4")).toEqual(["", "2", "", "3", ""]);
+			expect(getRowContent("1|2||3|4")).toEqual(["", "2", "", "3", ""]);
 		});
 	});
 
@@ -208,46 +214,46 @@ describe("MD Utils", () => {
 			]);
 		});
 	});
-});
 
-describe("createHeaderRow", () => {
-	test('should return a string with headers separated by " | "', () => {
-		expect(createHeaderRow(["Header1", "Header2", "Header3"])).toBe(
-			"| Header1 | Header2 | Header3 |"
-		);
+	describe("createHeaderRow", () => {
+		test('should return a string with headers separated by " | "', () => {
+			expect(createHeaderRow(["Header1", "Header2", "Header3"])).toBe(
+				"| Header1 | Header2 | Header3 |"
+			);
+		});
+
+		test("should handle an empty array", () => {
+			expect(createHeaderRow([])).toBe("| |");
+		});
+
+		test("should handle one string", () => {
+			expect(createHeaderRow([""])).toBe("| |");
+		});
+
+		test("should handle array with one element", () => {
+			const headers = ["Header1"];
+			const result = createHeaderRow(headers);
+			expect(result).toBe("| Header1 |");
+		});
 	});
 
-	test("should handle an empty array", () => {
-		expect(createHeaderRow([])).toBe("| |");
-	});
+	describe("createSeparatorRow", () => {
+		test("should return a string with separators for each header", () => {
+			const headers = ["Header1", "Header2", "Header3"];
+			const result = createSeparatorRow(headers);
+			expect(result).toBe("| --- | --- | --- |");
+		});
 
-	test("should handle one string", () => {
-		expect(createHeaderRow([""])).toBe("| |");
-	});
+		test("should handle an empty array", () => {
+			const headers: string[] = [];
+			const result = createSeparatorRow(headers);
+			expect(result).toBe("| |");
+		});
 
-	test("should handle array with one element", () => {
-		const headers = ["Header1"];
-		const result = createHeaderRow(headers);
-		expect(result).toBe("| Header1 |");
-	});
-});
-
-describe("createSeparatorRow", () => {
-	test("should return a string with separators for each header", () => {
-		const headers = ["Header1", "Header2", "Header3"];
-		const result = createSeparatorRow(headers);
-		expect(result).toBe("| --- | --- | --- |");
-	});
-
-	test("should handle an empty array", () => {
-		const headers: string[] = [];
-		const result = createSeparatorRow(headers);
-		expect(result).toBe("| |");
-	});
-
-	test("should handle array with one element", () => {
-		const headers = ["Header1"];
-		const result = createSeparatorRow(headers);
-		expect(result).toBe("| --- |");
+		test("should handle array with one element", () => {
+			const headers = ["Header1"];
+			const result = createSeparatorRow(headers);
+			expect(result).toBe("| --- |");
+		});
 	});
 });

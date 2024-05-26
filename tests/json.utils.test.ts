@@ -4,23 +4,24 @@ import {
 	collectAllKeys,
 	convertToPrimitive,
 	flattenStructure,
+	getNestedObject,
 	handleObject
 } from "src/json.utils";
 
 describe("JSON Utils", () => {
 	describe("collectAllKeys", () => {
+		test("Keys", () => {
+			expect(
+				collectAllKeys([{key1: 1.1}, {key2: 2.2}, {key3: 3.3}])
+			).toStrictEqual(["key1", "key2", "key3"]);
+		});
+
 		test("sameKeys", () => {
 			expect(
 				collectAllKeys([
 					{key1: 1.1, key2: 1.2, key3: 1.3},
 					{key1: 2.1, key2: 2.2, key3: 2.3}
 				])
-			).toStrictEqual(["key1", "key2", "key3"]);
-		});
-
-		test("mixedKeysSingle", () => {
-			expect(
-				collectAllKeys([{key1: 1.1}, {key2: 2.2}, {key3: 3.3}])
 			).toStrictEqual(["key1", "key2", "key3"]);
 		});
 
@@ -113,25 +114,6 @@ describe("JSON Utils", () => {
 			});
 		});
 
-		test("smallMixedObjectArray 1", () => {
-			expect(
-				flattenStructure({
-					name: "Jana",
-					contact: {
-						mail: "3@example.com",
-						phone: "blah"
-					},
-					food: ["Pizza", "Pasta"]
-				})
-			).toStrictEqual({
-				"contact.mail": "3@example.com",
-				"contact.phone": "blah",
-				name: "Jana",
-				"food[0]": "Pizza",
-				"food[1]": "Pasta"
-			});
-		});
-
 		test("smallMixedObjectArray 2", () => {
 			expect(
 				flattenStructure({
@@ -194,11 +176,20 @@ describe("JSON Utils", () => {
 
 		test("non-string, non-array, non-object values", () => {
 			expect(
-				flattenStructure({a: 1, b: true, c: null, d: undefined})
+				flattenStructure({
+					a: 1,
+					b: true,
+					c: null,
+					d: undefined,
+					e: 0,
+					f: -9
+				})
 			).toStrictEqual({
 				a: 1,
 				b: true,
-				c: null
+				c: null,
+				e: 0,
+				f: -9
 			});
 		});
 
@@ -294,6 +285,28 @@ describe("JSON Utils", () => {
 				"prefix.key.1[1]": "value4"
 			});
 		});
+
+		test("should handle given structure", () => {
+			expect(
+				handleObject(
+					[
+						["value1", "value2"],
+						["value3", "value4"]
+					],
+					"key",
+					{a: {b: []}},
+					"prefix."
+				)
+			).toEqual({
+				a: {
+					b: []
+				},
+				"prefix.key.0[0]": "value1",
+				"prefix.key.0[1]": "value2",
+				"prefix.key.1[0]": "value3",
+				"prefix.key.1[1]": "value4"
+			});
+		});
 	});
 
 	describe("convertToPrimitive", () => {
@@ -321,6 +334,7 @@ describe("JSON Utils", () => {
 			expect(convertToPrimitive("123")).toBe(123);
 			expect(convertToPrimitive("456 ")).toBe(456);
 			expect(convertToPrimitive(" 789")).toBe(789);
+			expect(convertToPrimitive(" 0")).toBe(0);
 		});
 
 		test("should return non-numeric string as is", () => {
@@ -335,6 +349,69 @@ describe("JSON Utils", () => {
 			expect(convertToPrimitive("FaLsE")).toBe(false);
 			expect(convertToPrimitive("NuLl")).toBe(null);
 			expect(convertToPrimitive("UnDeFiNeD")).toBe(undefined);
+		});
+	});
+
+	describe("getNestedObject", () => {
+		test("should handle empty object", () => {
+			expect(
+				getNestedObject(
+					{},
+					["key1", "key2"],
+					[false, false],
+					[NaN, NaN]
+				)
+			).toEqual({});
+		});
+
+		test("should handle nested object", () => {
+			expect(
+				getNestedObject(
+					{key1: {key2: "value"}},
+					["key1", "key2"],
+					[false, false],
+					[NaN, NaN]
+				)
+			).toEqual({
+				key2: "value"
+			});
+		});
+
+		test("should handle nested array", () => {
+			expect(
+				getNestedObject(
+					{key1: [{key2: "value"}]},
+					["key1[0]", "key2"],
+					[true, false],
+					[0, NaN]
+				)
+			).toEqual({
+				key2: "value"
+			});
+		});
+
+		test("should handle nested object in array", () => {
+			expect(
+				getNestedObject(
+					{key1: [{key2: {key3: "value"}}]},
+					["key1[0]", "key2", "key3"],
+					[true, false, false],
+					[0, NaN, NaN]
+				)
+			).toEqual({
+				key3: "value"
+			});
+		});
+
+		test("should handle nested array in object", () => {
+			expect(
+				getNestedObject(
+					{key1: {key2: ["value"]}},
+					["key1", "key2[0]"],
+					[false, true],
+					[NaN, 0]
+				)
+			).toEqual({key2: ["value"]});
 		});
 	});
 });
