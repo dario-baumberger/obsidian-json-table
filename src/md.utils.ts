@@ -37,3 +37,25 @@ export function parseHeader(header: string): {
 		.filter((index) => index !== undefined) as number[]; // Filter out undefined values and convert to number[]
 	return {keys, isArray, indices};
 }
+
+export function createHeaderRow(headers: string[]): string {
+	return removeDuplicateWhitespaces(`| ${headers.join(" | ")} |`);
+}
+
+export function createSeparatorRow(headers: string[]): string {
+	return removeDuplicateWhitespaces(
+		`| ${headers.map(() => "---").join(" | ")} |`
+	);
+}
+export function createDataRow(
+	data: {[key: string]: unknown},
+	headers: string[]
+): string {
+	return `| ${headers
+		.map((header) => (data[header] !== undefined ? `${data[header]}` : ""))
+		.join(" | ")} |`;
+}
+
+export function removeDuplicateWhitespaces(row: string): string {
+	return row.replace(/( +)/g, " ");
+}

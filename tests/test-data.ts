@@ -115,7 +115,7 @@ export const testCaseNDimensionMedium = {
 };
 
 export const testCaseNDimensionComplex = {
-	md: `| name | age | contact.email | contact.phone | skills[0] | skills[1] | education.degree | education.school | projects[0].name | projects[0].duration | projects[0].technologies[0] | projects[0].technologies[1] | projects[1].name | projects[1].duration | projects[1].technologies[0] | projects[1].technologies[1] | active | balance |\n| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |\n| John Doe | 30 | john@example.com | 1234567890 | JavaScript | TypeScript | Computer Science | XYZ University | Project 1 | 0 | React | Redux | Project 2 | 12 | Node.js | MongoDB | true | -100 |\n| Jane Doe | | jane@example.com | 0987654321 | Python | Data Analysis | Data Science | ABC University | Project A | 3 | Pandas | NumPy | Project B | 8 | Scikit-learn | TensorFlow | false | 200 |\n| Bob Smith | 35 | bob@example.com | | Java | | | | Project X | 10 | Spring Boot | | | | | | true | -50 |`,
+	md: `| name | age | contact.email | contact.phone | skills[0] | skills[1] | education.degree | education.school | projects[0].name | projects[0].duration | projects[0].technologies[0] | projects[0].technologies[1] | projects[1].name | projects[1].duration | projects[1].technologies[0] | projects[1].technologies[1] | active | balance |\n| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |\n| John Doe | 30 | john@example.com | 1234567890 | JavaScript | TypeScript | Computer Science | XYZ University | Project 1 | 0 | React | Redux | Project 2 | 12 | Node.js | MongoDB | true | -100 |\n| Jane Doe | | jane@example.com | 0987654321 | Python | Data Analysis | Data Science | ABC University | Project A | 3 | Pandas | NumPy | Project B | 8 | Scikit-learn | TensorFlow | false | 200 |\n| Bob Smith | null | bob@example.com | | Java | | | | Project X | 10 | Spring Boot | | | | | | true | -50 |`,
 	json: [
 		{
 			name: "John Doe",
@@ -172,7 +172,7 @@ export const testCaseNDimensionComplex = {
 		},
 		{
 			name: "Bob Smith",
-			age: 35,
+			age: null,
 			contact: {
 				email: "bob@example.com"
 			},
@@ -193,6 +193,6 @@ export const testCaseNDimensionComplex = {
 		"| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
 		"| John Doe | 30 | john@example.com | 1234567890 | JavaScript | TypeScript | Computer Science | XYZ University | Project 1 | 0 | React | Redux | Project 2 | 12 | Node.js | MongoDB | true | -100 |",
 		"| Jane Doe | | jane@example.com | 0987654321 | Python | Data Analysis | Data Science | ABC University | Project A | 3 | Pandas | NumPy | Project B | 8 | Scikit-learn | TensorFlow | false | 200 |",
-		"| Bob Smith | 35 | bob@example.com | | Java | | | | Project X | 10 | Spring Boot | | | | | | true | -50 |"
+		"| Bob Smith | null | bob@example.com | | Java | | | | Project X | 10 | Spring Boot | | | | | | true | -50 |"
 	]
 };

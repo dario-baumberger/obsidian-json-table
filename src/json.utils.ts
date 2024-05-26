@@ -1,3 +1,65 @@
+import {getLineContent, parseHeader} from "./md.utils";
+
+/**
+ * Checks if the input is an object and not null
+ *
+ * @param {unknown} input
+ * @returns {boolean}
+ */
+function isObject(input: unknown): boolean {
+	return typeof input === "object" && input !== null;
+}
+
+/**
+ * Handles the case where the value is an array
+ *
+ * @param {unknown[]} value
+ * @param {string} key
+ * @param {string} prefix
+ * @returns {Record<string, unknown>}
+ */
+function handleArray(
+	value: unknown[],
+	key: string,
+	prefix: string
+): Record<string, unknown> {
+	const flatObject: Record<string, unknown> = {};
+	value.forEach((item, index) => {
+		if (isObject(item)) {
+			Object.assign(
+				flatObject,
+				flattenStructure(item, `${prefix}${key}[${index}].`)
+			);
+		} else if (item !== undefined) {
+			flatObject[`${prefix}${key}[${index}]`] = item;
+		}
+	});
+	return flatObject;
+}
+
+/**
+ * Handles the case where the value is not an array
+ *
+ * @param {unknown} value
+ * @param {string} key
+ * @param {string} prefix
+ * @returns {Record<string, unknown>}
+ */
+function handleValue(
+	value: unknown,
+	key: string,
+	prefix: string
+): Record<string, unknown> {
+	const flatObject: Record<string, unknown> = {};
+	const newKey = `${prefix}${key}`;
+	if (isObject(value)) {
+		Object.assign(flatObject, flattenStructure(value, `${newKey}.`));
+	} else if (value !== undefined) {
+		flatObject[newKey] = value;
+	}
+	return flatObject;
+}
+
 /**
  * Flattens the structure of a JSON object
  *
@@ -5,41 +67,22 @@
  * @param {string} prefix
  * @returns {Object}
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function flattenStructure(
 	input: unknown,
 	prefix: string = ""
 ): Record<string, unknown> {
 	const flatObject: Record<string, unknown> = {};
 
-	if (typeof input !== "object" || !input) {
+	if (!isObject(input)) {
 		return flatObject;
 	}
 
 	for (const key in input as Record<string, unknown>) {
 		const value = (input as Record<string, unknown>)[key];
 		if (Array.isArray(value)) {
-			value.forEach((item, index) => {
-				const newKey = `${prefix}${key}[${index}]`;
-				if (typeof item === "object" && item !== null) {
-					Object.assign(
-						flatObject,
-						flattenStructure(item, `${newKey}.`)
-					);
-				} else if (item !== undefined) {
-					flatObject[newKey] = item;
-				}
-			});
+			Object.assign(flatObject, handleArray(value, key, prefix));
 		} else {
-			const newKey = `${prefix}${key}`;
-			if (typeof value === "object" && value !== null) {
-				Object.assign(
-					flatObject,
-					flattenStructure(value, `${newKey}.`)
-				);
-			} else if (value !== undefined) {
-				flatObject[newKey] = value;
-			}
+			Object.assign(flatObject, handleValue(value, key, prefix));
 		}
 	}
 	return flatObject;
@@ -124,9 +167,9 @@ export function getNestedObject(
 }
 
 export function convertToPrimitive(
-	input: string
+	input: string | boolean | number | string | null | undefined
 ): boolean | number | string | null | undefined {
-	const check = input.toLowerCase();
+	const check = `${input}`.toLowerCase();
 
 	if (check === "true") {
 		return true;
@@ -135,8 +178,6 @@ export function convertToPrimitive(
 	} else if (check === "null") {
 		return null;
 	} else if (check === "undefined") {
-		return undefined;
-	} else if (check === undefined) {
 		return undefined;
 	} else if (check === "") {
 		return undefined;
@@ -148,5 +189,50 @@ export function convertToPrimitive(
 		return Number(input);
 	} else {
 		return input;
+	}
+}
+
+export function processRow(
+	row: string,
+	parsedHeaders: ReturnType<typeof parseHeader>[]
+): Record<string, unknown> {
+	const rowData = getLineContent(row);
+	const rowObject: Record<string, unknown> = {};
+
+	for (let i = 0; i < parsedHeaders.length; i++) {
+		processCell(rowData[i], parsedHeaders[i], rowObject);
+	}
+
+	return rowObject;
+}
+
+export function processCell(
+	value: string | number | null | undefined | boolean,
+	header: ReturnType<typeof parseHeader>,
+	rowObject: Record<string, unknown>
+) {
+	value = convertToPrimitive(value);
+
+	if (value === undefined || value === "") {
+		return;
+	}
+
+	const {keys, isArray, indices} = header;
+	const key = keys[keys.length - 1].replace(/\[\d+\]/, "");
+
+	const current = getNestedObject(
+		rowObject,
+		keys,
+		isArray,
+		indices
+	) as Record<string, unknown>;
+
+	if (isArray[keys.length - 1]) {
+		if (!Array.isArray(current[key])) {
+			(current[key] as unknown[]) = [];
+		}
+		(current[key] as unknown[])[indices[keys.length - 1]] = value;
+	} else {
+		current[key] = value;
 	}
 }

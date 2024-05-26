@@ -257,47 +257,84 @@ describe("JSON Utils", () => {
 				undefined
 			);
 		});
-	});
-});
 
-describe("convertToPrimitive", () => {
-	test('should convert "true" to boolean true', () => {
-		expect(convertToPrimitive("true")).toBe(true);
+		test("should handle empty object", () => {
+			expect(handleObject({}, "key", {}, "prefix.")).toEqual({});
+		});
+
+		test("should handle array of objects", () => {
+			expect(
+				handleObject(
+					[{subkey: "value1"}, {subkey: "value2"}],
+					"key",
+					{},
+					"prefix."
+				)
+			).toEqual({
+				"prefix.key.0.subkey": "value1",
+				"prefix.key.1.subkey": "value2"
+			});
+		});
+
+		test("should handle nested arrays", () => {
+			expect(
+				handleObject(
+					[
+						["value1", "value2"],
+						["value3", "value4"]
+					],
+					"key",
+					{},
+					"prefix."
+				)
+			).toEqual({
+				"prefix.key.0[0]": "value1",
+				"prefix.key.0[1]": "value2",
+				"prefix.key.1[0]": "value3",
+				"prefix.key.1[1]": "value4"
+			});
+		});
 	});
 
-	test('should convert "false" to boolean false', () => {
-		expect(convertToPrimitive("false")).toBe(false);
-	});
+	describe("convertToPrimitive", () => {
+		test('should convert "true" to boolean true', () => {
+			expect(convertToPrimitive("true")).toBe(true);
+		});
 
-	test('should convert "null" to null', () => {
-		expect(convertToPrimitive("null")).toBe(null);
-	});
+		test('should convert "false" to boolean false', () => {
+			expect(convertToPrimitive("false")).toBe(false);
+		});
 
-	test('should convert "undefined" to undefined', () => {
-		expect(convertToPrimitive("undefined")).toBe(undefined);
-	});
+		test('should convert "null" to null', () => {
+			expect(convertToPrimitive("null")).toBe(null);
+		});
 
-	test('should return string starting with "0" as is', () => {
-		expect(convertToPrimitive("0123")).toBe("0123");
-	});
+		test('should convert "undefined" to undefined', () => {
+			expect(convertToPrimitive("undefined")).toBe(undefined);
+		});
 
-	test("should convert numeric string to number", () => {
-		expect(convertToPrimitive("123")).toBe(123);
-		expect(convertToPrimitive("456 ")).toBe(456);
-		expect(convertToPrimitive(" 789")).toBe(789);
-	});
+		test('should return string starting with "0" as is', () => {
+			expect(convertToPrimitive("0123")).toBe("0123");
+		});
 
-	test("should return non-numeric string as is", () => {
-		expect(convertToPrimitive("Hello")).toBe("Hello");
-		expect(convertToPrimitive("3 6 9")).toBe("3 6 9");
-		expect(convertToPrimitive("1,2")).toBe("1,2");
-		expect(convertToPrimitive("999'999.99")).toBe("999'999.99");
-	});
+		test("should convert numeric string to number", () => {
+			expect(convertToPrimitive("123")).toBe(123);
+			expect(convertToPrimitive("456 ")).toBe(456);
+			expect(convertToPrimitive(" 789")).toBe(789);
+		});
 
-	test("should handle case insensitivity", () => {
-		expect(convertToPrimitive("TrUe")).toBe(true);
-		expect(convertToPrimitive("FaLsE")).toBe(false);
-		expect(convertToPrimitive("NuLl")).toBe(null);
-		expect(convertToPrimitive("UnDeFiNeD")).toBe(undefined);
+		test("should return non-numeric string as is", () => {
+			expect(convertToPrimitive("Hello")).toBe("Hello");
+			expect(convertToPrimitive("3 6 9")).toBe("3 6 9");
+			expect(convertToPrimitive("1,2")).toBe("1,2");
+			expect(convertToPrimitive("999'999.99")).toBe("999'999.99");
+		});
+
+		test("should handle case insensitivity", () => {
+			expect(convertToPrimitive("TrUe")).toBe(true);
+			expect(convertToPrimitive("FaLsE")).toBe(false);
+			expect(convertToPrimitive("NuLl")).toBe(null);
+			expect(convertToPrimitive("UnDeFiNeD")).toBe(undefined);
+		});
 	});
 });

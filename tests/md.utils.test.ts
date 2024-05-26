@@ -1,6 +1,8 @@
 import {expect, test} from "vitest";
 import {describe} from "node:test";
 import {
+	createHeaderRow,
+	createSeparatorRow,
 	getLineContent,
 	getTableLines,
 	parseHeader,
@@ -205,5 +207,47 @@ describe("MD Utils", () => {
 				"c"
 			]);
 		});
+	});
+});
+
+describe("createHeaderRow", () => {
+	test('should return a string with headers separated by " | "', () => {
+		expect(createHeaderRow(["Header1", "Header2", "Header3"])).toBe(
+			"| Header1 | Header2 | Header3 |"
+		);
+	});
+
+	test("should handle an empty array", () => {
+		expect(createHeaderRow([])).toBe("| |");
+	});
+
+	test("should handle one string", () => {
+		expect(createHeaderRow([""])).toBe("| |");
+	});
+
+	test("should handle array with one element", () => {
+		const headers = ["Header1"];
+		const result = createHeaderRow(headers);
+		expect(result).toBe("| Header1 |");
+	});
+});
+
+describe("createSeparatorRow", () => {
+	test("should return a string with separators for each header", () => {
+		const headers = ["Header1", "Header2", "Header3"];
+		const result = createSeparatorRow(headers);
+		expect(result).toBe("| --- | --- | --- |");
+	});
+
+	test("should handle an empty array", () => {
+		const headers: string[] = [];
+		const result = createSeparatorRow(headers);
+		expect(result).toBe("| |");
+	});
+
+	test("should handle array with one element", () => {
+		const headers = ["Header1"];
+		const result = createSeparatorRow(headers);
+		expect(result).toBe("| --- |");
 	});
 });
