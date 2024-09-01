@@ -1,39 +1,20 @@
-/**
- * Removes all whitespaces before and after |
- *
- * @param string string
- * @returns string
- */
-export function trimSeperatorSpaces(string: string): string {
-	return string.replace(/([^\S\r\n]*[|][^\S\r\n]*)/g, "|");
-}
+import {collectAllKeys, flattenStructure, processRow} from "./json.utils";
+import {
+	createDataRow,
+	createHeaderRow,
+	createSeparatorRow,
+	getRowContent,
+	getTableLines,
+	parseHeader,
+	removeDuplicateWhitespaces,
+	trimSeperatorSpaces
+} from "./md.utils";
 
 /**
- * Search all keys in json and return as string array
+ * Convert JSON string to Markdown table
  *
- * @param input []
- * @returns string
- */
-export function collectAllKeys(input: unknown[]): string[] {
-	const keys: string[] = [];
-
-	for (const obj of input) {
-		const jsonObject = obj as {[key: string]: never};
-		for (const key in jsonObject) {
-			if (jsonObject.hasOwnProperty(key) && !keys.includes(key)) {
-				keys.push(key);
-			}
-		}
-	}
-
-	return keys;
-}
-
-/**
- * Convert json string to markdown table
- *
- * @param content sring
- * @returns string
+ * @param {string} content
+ * @returns {string}
  */
 export function jsonToTable(content: string): string {
 	const jsonData = JSON.parse(content);
@@ -42,65 +23,45 @@ export function jsonToTable(content: string): string {
 		return "";
 	}
 
-	// create header and separators
-	const headers = collectAllKeys(jsonData);
-	const headerRow = `| ${headers.join(" | ")} |`;
-	const separatorRow = `| ${headers.map(() => "---").join(" | ")} |`;
+	const flatData = jsonData.map((data: string[]) => flattenStructure(data));
 
-	// create table body
-	const dataRows: string[] = jsonData.map(
-		(data: {[key: string]: unknown}) => {
-			return `| ${headers.map((header) => data[header]).join(" | ")} |`;
-		}
+	const headers = collectAllKeys(flatData);
+	const headerRow = createHeaderRow(headers);
+	const separatorRow = createSeparatorRow(headers);
+	const dataRows = flatData.map((data: {[key: string]: unknown}) =>
+		createDataRow(data, headers)
 	);
 
-	// make table array and removed dupplicate whitespaces
 	const markdownTable = [
 		headerRow,
 		separatorRow,
-		...dataRows.map((row: string) => row.replace(/( {2,})/g, " "))
+		...dataRows.map((data: string) => {
+			return removeDuplicateWhitespaces(data);
+		})
 	].join("\n");
 
 	return markdownTable;
 }
 
 /**
- * Convert markdown table to json string
+ * Convert Markdown table to JSON string
  *
- * @param content string
- * @returns Array
+ * @param {string} content
+ * @returns {Array}
  */
-export function tableToJson(content: string): unknown[] {
-	const tableObject: unknown[] = [];
-
-	// prepare input to work with
+export function tableToJson(content: string): Record<string, unknown>[] {
 	content = trimSeperatorSpaces(content);
 
-	// get lines
-	const lines = content.split("\n").map((line) => line.trim());
-
-	// Do not proceed if only header row and/or seperator row are given
+	const lines = getTableLines(content);
 	if (lines.length <= 2) {
-		return tableObject;
+		return [];
 	}
 
-	// get headers from first line
-	const headers = lines[0].substring(1, lines[0].length - 1).split("|");
-
-	// get content rows (no header row, no separators row)
+	const headers = getRowContent(lines[0]);
 	const rows = lines.slice(2);
+	const parsedHeaders = headers.map(parseHeader);
 
-	for (const row of rows) {
-		//remove leading and trailing |, after split by |
-		const rowData = row.slice(1, -1).split("|");
-		const rowObject: {[key: string]: unknown} = {};
-
-		for (let i = 0; i < headers.length; i++) {
-			rowObject[headers[i]] = rowData[i];
-		}
-
-		tableObject.push(rowObject);
-	}
-
-	return tableObject;
+	return rows
+		.map((row) => processRow(row, parsedHeaders))
+		.filter((row) => Object.keys(row).length > 0);
 }
