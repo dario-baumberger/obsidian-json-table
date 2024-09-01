@@ -63,6 +63,14 @@ describe("JSON Utils", () => {
 			expect(flattenStructure([])).toStrictEqual({});
 		});
 
+		test("String Input", () => {
+			expect(flattenStructure("asd")).toStrictEqual({});
+		});
+
+		test("Number Input", () => {
+			expect(flattenStructure(1337)).toStrictEqual({});
+		});
+
 		test("smallObject", () => {
 			expect(
 				flattenStructure({

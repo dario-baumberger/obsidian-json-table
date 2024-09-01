@@ -133,6 +133,16 @@ export function collectAllKeys(input: unknown[]): string[] {
 	return keys;
 }
 
+/**
+ * This function is used to get a nested object from a given object based on a list of keys.
+ * It also handles the case where the nested object is inside an array.
+ *
+ * @param rowObject - The object from which to get the nested object.
+ * @param keys - An array of keys representing the path to the nested object.
+ * @param isArray - An array of booleans indicating whether the corresponding key in the keys array is an array.
+ * @param indices - An array of indices corresponding to the keys that are arrays.
+ * @returns - The nested object if it exists, otherwise it returns the original object.
+ */
 export function getNestedObject(
 	rowObject: Record<string, unknown>,
 	keys: string[],
@@ -140,29 +150,38 @@ export function getNestedObject(
 	indices: number[]
 ): Record<string, unknown> | unknown[] {
 	let current: Record<string, unknown> | unknown[] = rowObject;
+	// Loop through the keys
 	for (let j = 0; j < keys.length - 1; j++) {
 		const key = keys[j].replace(/\[\d+\]/, ""); // replace array index
+		// If the key is an array
 		if (isArray[j]) {
+			// If the current key is not an array, initialize it as an array
 			if (!Array.isArray(current[key])) {
 				current[key] = [];
 			}
+			// If an index is provided for the array
 			if (indices[j] !== undefined) {
 				const arrayCurrent = current[key] as unknown[];
+				// If the current index is not an object, initialize it as an object
 				if (
 					typeof arrayCurrent[indices[j]] !== "object" ||
 					arrayCurrent[indices[j]] === null
 				) {
 					arrayCurrent[indices[j]] = {};
 				}
+				// Move the current pointer to the object at the current index
 				current = arrayCurrent[indices[j]] as Record<string, unknown>;
 			}
 		} else {
+			// If the current key is not an object, initialize it as an object
 			if (typeof current[key] !== "object" || current[key] === null) {
 				current[key] = {};
 			}
+			// Move the current pointer to the object at the current key
 			current = current[key] as Record<string, unknown>;
 		}
 	}
+	// Return the nested object
 	return current;
 }
 
